@@ -1,7 +1,8 @@
 const { DataTypes } = require('sequelize');
+
 module.exports = (sequelize, Sequelize) => {
-  const User = sequelize.define('User', {
-    user_id: {
+  const ItineraryItem = sequelize.define('ItineraryItem', {
+    item_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -10,15 +11,18 @@ module.exports = (sequelize, Sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    email: {
+    location: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
-    password: {
-      type: DataTypes.STRING,
+    time: {
+      type: DataTypes.TIME,
       allowNull: false,
+    },
+    notes: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
   });
-  return User;
+  return ItineraryItem;
 }
