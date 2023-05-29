@@ -7,6 +7,10 @@ module.exports = (sequelize, Sequelize) => {
             primaryKey: true,
             autoIncrement: true,
         },
+        trip_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+          },
         origin: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -24,5 +28,8 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false,
         },
     });
+    const Trip = require('./trip.model.js')(sequelize, Sequelize);
+    Flight.belongsTo(Trip, { foreignKey: 'trip_id' });
+    
     return Flight;
 }

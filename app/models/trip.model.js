@@ -20,5 +20,12 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
   });
+
+  const User = require('./user.model.js')(sequelize, Sequelize);
+  const Destination = require('./destination.model.js')(sequelize, Sequelize);
+
+  Trip.belongsTo(User, { foreignKey: 'user_id' });
+  Trip.belongsTo(Destination, { foreignKey: 'destination_id' });
+
   return Trip;
 }

@@ -12,6 +12,9 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
   });
+  const Trip = require('./trip.model.js')(sequelize, Sequelize);
+  
+  Itinerary.belongsTo(Trip, { foreignKey: 'trip_id' });
   
   return Itinerary;
 }

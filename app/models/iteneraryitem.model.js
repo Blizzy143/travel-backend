@@ -24,5 +24,9 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: true,
     },
   });
+
+  const Itinerary = require('./itenerary.model.js')(sequelize, Sequelize);
+  ItineraryItem.belongsTo(Itinerary, { foreignKey: 'itinerary_id' });
+
   return ItineraryItem;
 }
