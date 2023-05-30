@@ -38,7 +38,7 @@ require("./app/routes/recipeIngredient.routes")(app);
 require("./app/routes/user.routes")(app);
 
 app.use('/auth', authRouter)
-app.use('/auth', destinationsRouter)
+app.use('/destinations', destinationsRouter)
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3200;
