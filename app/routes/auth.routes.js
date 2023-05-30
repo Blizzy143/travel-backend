@@ -1,13 +1,16 @@
-module.exports = (app) => {
-  const auth = require("../controllers/auth.controller.js");
+const auth = require("../controllers/auth.controller.js");
 
-  var router = require("express").Router();
+const express = require('express');
 
-  // Login
-  router.post("/login", auth.login);
+var router = express.Router();
 
-  // Logout
-  router.post("/logout", auth.logout);
+// Register
+router.post("/register", auth.register);
 
-  app.use("/recipeapi", router);
-};
+// Login
+router.post("/login", auth.login);
+
+// Logout
+router.post("/logout", auth.logout);
+
+module.exports = router;
