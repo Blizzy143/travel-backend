@@ -30,15 +30,11 @@ app.use(bodyParser.json());
 
 const authRouter = require("./app/routes/auth.routes.js");
 const destinationsRouter = require("./app/routes/destinations.routes.js");
-
-require("./app/routes/ingredient.routes")(app);
-require("./app/routes/recipe.routes")(app);
-require("./app/routes/recipeStep.routes")(app);
-require("./app/routes/recipeIngredient.routes")(app);
-require("./app/routes/user.routes")(app);
+const tripsRouter = require("./app/routes/trips.routes.js")
 
 app.use('/auth', authRouter)
 app.use('/destinations', destinationsRouter)
+app.use('/trips', tripsRouter)
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3200;
