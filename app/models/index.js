@@ -2,6 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const dbConfig = require("../config/db.config.js");
 const Sequelize = require("sequelize");
+
+
+// Include the seeder file
+const seederFile = require('../seeders/20230523-destinations');
+
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   dialect: dbConfig.dialect,
@@ -30,5 +35,8 @@ Object.keys(db).forEach((modelName) => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+// Seed the data
+await seederFile.up(queryInterface, Sequelize);
 
 module.exports = db;
