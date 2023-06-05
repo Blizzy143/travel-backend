@@ -33,12 +33,14 @@ const destinationsRouter = require("./app/routes/destinations.routes.js");
 const tripsRouter = require("./app/routes/trips.routes.js")
 const flightsRouter = require("./app/routes/flights.routes.js")
 const itenerariesRouter = require("./app/routes/iteneraries.routes.js")
+const iteneraryItemsRouter =  require("./app/routes/iteneraryItems.routes.js")
 
 app.use('/auth', authRouter)
 app.use('/destinations', destinationsRouter)
 app.use('/trips', tripsRouter)
 app.use('/flights', flightsRouter)
 app.use('/iteneraries', itenerariesRouter)
+app.use('/iteneraryItems', iteneraryItemsRouter)
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3200;
