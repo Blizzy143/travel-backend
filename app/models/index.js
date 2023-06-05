@@ -37,6 +37,6 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 // Seed the data
-await seederFile.up(queryInterface, Sequelize);
+// seederFile.up(sequelize);
 
 module.exports = db;

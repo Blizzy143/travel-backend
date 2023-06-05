@@ -1,7 +1,9 @@
 'use strict';
 
+const { Destination } = require('../models');
+
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (sequelize) => {
     // Define the mock data for destinations
     const destinations = [
       {
@@ -22,9 +24,13 @@ module.exports = {
       },
       // Add more destinations as needed
     ];
+    
+    const transaction = await sequelize.transaction();
 
     // Insert the mock data into the "Destinations" table
-    await queryInterface.bulkInsert('Destinations', destinations, {});
+    await sequelize.bulkCreate(destinations, {transaction});
+
+    await transaction.commit();
   },
 
   down: async (queryInterface, Sequelize) => {
