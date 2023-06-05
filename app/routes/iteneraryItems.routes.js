@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const itineraryItemsController = require('../controllers/itineraryItems');
+const itineraryItemsController = require('../controllers/iteneraryItems.controller.js');
 
 // Get all itinerary items for a specific itinerary
 router.get('/itineraries/:itineraryId/itinerary-items', itineraryItemsController.getAllItineraryItems);
