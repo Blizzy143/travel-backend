@@ -5,7 +5,7 @@ const Sequelize = require("sequelize");
 
 
 // Include the seeder file
-const seederFile = require('../seeders/20230523-destinations');
+const seederFile = require('../seeders/20230603-destinations.js');
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
