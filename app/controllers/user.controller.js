@@ -1,7 +1,6 @@
-const db = require("../models");
-const User = db.user;
-const Session = db.session;
-const Op = db.Sequelize.Op;
+const { User, Session } = require("../models");
+
+
 const { encrypt, getSalt, hashPassword } = require("../authentication/crypto");
 
 // Create and Save a new User
@@ -65,14 +64,14 @@ exports.create = async (req, res) => {
               expirationDate: expireTime,
             };
             await Session.create(session).then(async (data) => {
-              let sessionId = data.id;
-              let token = await encrypt(sessionId);
+              // let sessionId = data.id;
+              // let token = await encrypt(sessionId);
               let userInfo = {
                 email: user.email,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 id: user.id,
-                token: token,
+                // token: token,
               };
               res.send(userInfo);
             });
@@ -88,22 +87,6 @@ exports.create = async (req, res) => {
     })
     .catch((err) => {
       return err.message || "Error retrieving User with email=" + email;
-    });
-};
-
-// Retrieve all Users from the database.
-exports.findAll = (req, res) => {
-  const id = req.query.id;
-  var condition = id ? { id: { [Op.like]: `%${id}%` } } : null;
-
-  User.findAll({ where: condition })
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving users.",
-      });
     });
 };
 

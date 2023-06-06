@@ -6,7 +6,11 @@ module.exports = (sequelize, Sequelize) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lastName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -16,7 +20,11 @@ module.exports = (sequelize, Sequelize) => {
       unique: true,
     },
     password: {
-      type: DataTypes.STRING,
+      type: Sequelize.BLOB,
+      allowNull: false,
+    },
+    salt: {
+      type: Sequelize.BLOB,
       allowNull: false,
     },
   });

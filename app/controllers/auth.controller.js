@@ -1,13 +1,14 @@
-const db = require("../models");
+const {Session, User} = require("../models");
 const { authenticate } = require("../authentication/authentication");
-const User = db.user;
-const Session = db.session;
-const Op = db.Sequelize.Op;
+
 const { encrypt } = require("../authentication/crypto");
+
+const bcrypt = require('bcrypt');
+
 
 exports.register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     // Check if the user already exists
     const existingUser = await User.findOne({ where: { email } });
@@ -19,7 +20,7 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a new user
-    const newUser = await User.create({ name, email, password: hashedPassword });
+    const newUser = await User.create({ firstName, lastName, email, password: hashedPassword });
 
     return res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
