@@ -37,7 +37,7 @@ authenticate = async (req, res, require = true) => {
         }
         return {
           type: "credentials",
-          userId: user.id,
+          userId: user.user_id,
         };
       } else {
         return res.status(401).send({
