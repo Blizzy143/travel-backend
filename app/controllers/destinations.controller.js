@@ -30,8 +30,8 @@ const getDestinationById = async (req, res) => {
 // Create a new destination
 const createDestination = async (req, res) => {
   try {
-    const { name, country } = req.body;
-    const newDestination = await Destination.create({ name, country });
+    const { name, description, rating } = req.body;
+    const newDestination = await Destination.create({ name, description, rating });
     return res.status(201).json(newDestination);
   } catch (error) {
     console.error('Error in creating destination:', error);
@@ -43,13 +43,14 @@ const createDestination = async (req, res) => {
 const updateDestination = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, country } = req.body;
+    const { name, description, rating } = req.body;
     const destination = await Destination.findByPk(id);
     if (!destination) {
       return res.status(404).json({ message: 'Destination not found' });
     }
     destination.name = name;
-    destination.country = country;
+    destination.description = description;
+    destination.rating = rating;
     await destination.save();
     return res.json(destination);
   } catch (error) {
