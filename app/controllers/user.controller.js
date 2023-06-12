@@ -1,7 +1,6 @@
-const db = require("../models");
-const User = db.user;
-const Session = db.session;
-const Op = db.Sequelize.Op;
+const { User, Session } = require("../models");
+
+
 const { encrypt, getSalt, hashPassword } = require("../authentication/crypto");
 
 // Create and Save a new User

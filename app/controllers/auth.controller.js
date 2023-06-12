@@ -1,32 +1,7 @@
-const db = require("../models");
+const {Session, User} = require("../models");
 const { authenticate } = require("../authentication/authentication");
-const User = db.user;
-const Session = db.session;
-const Op = db.Sequelize.Op;
+
 const { encrypt } = require("../authentication/crypto");
-
-exports.register = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-
-    // Check if the user already exists
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      return res.status(409).json({ message: 'Email already exists' });
-    }
-
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create a new user
-    const newUser = await User.create({ name, email, password: hashedPassword });
-
-    return res.status(201).json({ message: 'User registered successfully' });
-  } catch (error) {
-    console.error('Error in user registration:', error);
-    return res.status(500).json({ message: 'Internal server error' });
-  }
-};
 
 exports.login = async (req, res) => {
   let { userId } = await authenticate(req, res, "credentials");
@@ -42,7 +17,7 @@ exports.login = async (req, res) => {
 
     const session = {
       email: user.email,
-      userId: userId,
+      userId: user.user_id,
       expirationDate: expireTime,
     };
     await Session.create(session).then(async (data) => {
@@ -52,7 +27,7 @@ exports.login = async (req, res) => {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-        id: user.id,
+        id: user.user_id,
         token: token,
       };
       res.send(userInfo);

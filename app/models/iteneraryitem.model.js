@@ -11,7 +11,7 @@ module.exports = (sequelize, Sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    location: {
+    destination: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -26,7 +26,9 @@ module.exports = (sequelize, Sequelize) => {
   });
 
   const Itinerary = require('./itenerary.model.js')(sequelize, Sequelize);
+  const Destination = require('./destination.model.js')(sequelize, Sequelize);
   ItineraryItem.belongsTo(Itinerary, { foreignKey: 'itinerary_id' });
+  ItineraryItem.belongsTo(Destination, { foreignKey: 'destination_id' })
 
   return ItineraryItem;
 }
