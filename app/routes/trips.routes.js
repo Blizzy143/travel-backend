@@ -3,12 +3,15 @@ const router = express.Router();
 const tripsController = require('../controllers/trips.controller.js');
 
 // Get all trips
-router.get('/trips', tripsController.getAllTrips);
+router.get('/', tripsController.getAllTrips);
+
+// Get all trips
+router.get('/:id', tripsController.getTripById);
 
 // Create a new trip
-router.post('/trips', tripsController.createTrip);
+router.post('/', tripsController.createTrip);
 
 // Delete a trip
-router.delete('/trips/:tripId', tripsController.deleteTrip);
+router.delete('/:tripId', tripsController.deleteTrip);
 
 module.exports = router;

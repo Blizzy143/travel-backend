@@ -14,19 +14,52 @@ exports.getAllTrips = async (req, res) => {
   }
 };
 
+exports.getTrips = async (req, res) => {
+  try {
+    const { userId, destinationId } = req.query;
+    console.log("request =============" +req.params)
+    console.log('user id ======>' + userId);
+    console.log('destination id ======>' + destinationId);
+    const trips = await Trip.findAll({ where: { user_id: req.params.userId, destination_id: req.params.destinationId } });
+    res.json(trips);
+  } catch (error) {
+    console.log("fetch trips error===>" +error);
+    res.status(500).json({ error: 'Failed to fetch trips' });
+  }
+};
+
+exports.getTripById = async (req, res) => {
+  try {
+    const trip = await Trip.findOne({ where: { id: req.params.id, userId: req.user.id, destinationId: req.query.destinationId } });
+    if (!trip) {
+      return res.status(404).json({ error: 'Trip not found' });
+    }
+    res.json(trip);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch trip details' });
+  }
+};
+
+
 // Create a new trip
 exports.createTrip = async (req, res) => {
+  console.log(req.body);
   try {
-    const { destinationId, userId } = req.body;
+    const { name, destinationId, userId, start_date, end_date } = req.body;
 
     const destination = await Destination.findByPk(destinationId);
     const user = await User.findByPk(userId);
 
-    if (!destination || !user) {
-      return res.status(404).json({ message: 'Destination or user not found' });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    const trip = await Trip.create({ destinationId, userId });
+    if (!destination) {
+      return res.status(404).json({ message: 'Destination not found' });
+    }
+
+    const trip = await Trip.create({ name: name, start_date: start_date, end_date: end_date, destination_id: destinationId, user_id: userId });
 
     res.status(201).json(trip);
   } catch (error) {
