@@ -17,7 +17,7 @@ exports.login = async (req, res) => {
 
     const session = {
       email: user.email,
-      userId: userId,
+      userId: user.user_id,
       expirationDate: expireTime,
     };
     await Session.create(session).then(async (data) => {
@@ -27,7 +27,7 @@ exports.login = async (req, res) => {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-        id: user.id,
+        id: user.user_id,
         token: token,
       };
       res.send(userInfo);

@@ -14,12 +14,15 @@ const getAllDestinations = async (req, res) => {
 
 // Get a destination by ID
 const getDestinationById = async (req, res) => {
+
+  console.log('params ======> '+ req.params);
   try {
     const { id } = req.params;
     const destination = await Destination.findByPk(id);
     if (!destination) {
       return res.status(404).json({ message: 'Destination not found' });
     }
+    console.log('destination =====>' + destination)
     return res.json(destination);
   } catch (error) {
     console.error('Error in getting destination by ID:', error);
