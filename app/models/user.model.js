@@ -23,6 +23,11 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.BLOB,
       allowNull: false,
     },
+    user_type: {
+       type: DataTypes.STRING,
+       allowNull: false,
+       defaultValue: 'user',
+    },      
     salt: {
       type: Sequelize.BLOB,
       allowNull: false,
