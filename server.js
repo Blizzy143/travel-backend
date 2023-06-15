@@ -50,6 +50,10 @@ app.use('/users', userRouter)
 app.use('/hotels', hotelRouter)
 app.use('/places', placeController)
 
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to Travel App." });
+});
+
 // set port, listen for requests
 const PORT = process.env.PORT || 3200;
 if (process.env.NODE_ENV !== "test") {
