@@ -45,10 +45,10 @@ exports.getTripById = async (req, res) => {
 exports.createTrip = async (req, res) => {
   console.log(req.body);
   try {
-    const { name, destinationId, userId, start_date, end_date } = req.body;
+    const { name, destination_id, user_id, start_date, end_date } = req.body;
 
-    const destination = await Destination.findByPk(destinationId);
-    const user = await User.findByPk(userId);
+    const destination = await Destination.findByPk(destination_id);
+    const user = await User.findByPk(user_id);
 
 
     if (!user) {
@@ -59,7 +59,7 @@ exports.createTrip = async (req, res) => {
       return res.status(404).json({ message: 'Destination not found' });
     }
 
-    const trip = await Trip.create({ name: name, start_date: start_date, end_date: end_date, destination_id: destinationId, user_id: userId });
+    const trip = await Trip.create({ name: name, start_date: start_date, end_date: end_date, destination_id: destination_id, user_id: user_id });
 
     res.status(201).json(trip);
   } catch (error) {
@@ -87,3 +87,42 @@ exports.deleteTrip = async (req, res) => {
     res.status(500).json({ message: 'An error occurred while deleting the trip' });
   }
 };
+
+
+// Update a trip
+exports.updateTrip = async (req, res) => {
+  try {
+    const { tripId } = req.params;
+    const { name, destination_id, user_id, start_date, end_date } = req.body;
+
+    const trip = await Trip.findByPk(tripId);
+
+    if (!trip) {
+      return res.status(404).json({ message: 'Trip not found' });
+    }
+
+    const destination = await Destination.findByPk(destination_id);
+    const user = await User.findByPk(user_id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (!destination) {
+      return res.status(404).json({ message: 'Destination not found' });
+    }
+
+    trip.name = name;
+    trip.start_date = start_date;
+    trip.end_date = end_date;
+    trip.destination_id = destination_id;
+    trip.user_id = user_id;
+
+    await trip.save();
+
+    res.status(200).json(trip);
+  } catch (error) {
+    console.error('Error updating trip:', error);
+    res.status(500).json({ message: 'An error occurred while updating the trip' });
+  }
+}
