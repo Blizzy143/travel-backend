@@ -1,6 +1,7 @@
 // controllers/destinations.js
 const { Destination } = require('../models');
 const { Place } = require('../models');
+const { Hotel } = require('../models');
 
 // Get all destinations
 const getAllDestinations = async (req, res) => {
@@ -16,7 +17,16 @@ const getAllDestinations = async (req, res) => {
 // Get a destination by ID
 const getDestinationById = async (req, res) => {
   const id = req.params.id;
-  Destination.findByPk(id, { include: Place })
+  Destination.findByPk(id, {
+    include: [
+      {
+        model: Place
+      },
+      {
+        model: Hotel,
+      }
+    ]
+  })
     .then(data => {
       if (!data) {
         res.status(404).send({ message: "Not found destination with id " + id });

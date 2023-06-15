@@ -22,12 +22,17 @@ db.sequelize = sequelize;
 // Include the model files
 db.Destination = require('./destination.model.js')(sequelize, Sequelize);
 db.Place = require('./place.model.js')(sequelize, Sequelize);
+db.Hotel = require('./hotel.model.js')(sequelize, Sequelize);
 
 
 //relationship between destination and place
 
 db.Destination.hasMany(db.Place, { foreignKey: 'destination_id' });
 db.Place.belongsTo(db.Destination, { foreignKey: 'destination_id' });
+
+//relationship between Destination and hotel
+db.Destination.hasMany(db.Hotel, { foreignKey: 'destination_id' });
+db.Hotel.belongsTo(db.Destination, { foreignKey: 'destination_id' });
 
 
 module.exports = db;
