@@ -3,15 +3,7 @@ const { Itinerary, ItineraryItem, Destination } = require('../models');
 // Get all itineraries
 exports.getAllItineraries = async (req, res) => {
   try {
-    const itineraries = await Itinerary.findAll({
-      include: [
-        {
-          model: ItineraryItem,
-          include: [Destination],
-        },
-      ],
-    });
-
+    const itineraries = await Itinerary.findAll();
     res.status(200).json(itineraries);
   } catch (error) {
     console.error('Error getting itineraries:', error);
@@ -24,14 +16,7 @@ exports.getItineraryById = async (req, res) => {
   try {
     const { itineraryId } = req.params;
 
-    const itinerary = await Itinerary.findByPk(itineraryId, {
-      include: [
-        {
-          model: ItineraryItem,
-          include: [Destination],
-        },
-      ],
-    });
+    const itinerary = await Itinerary.findByPk(itineraryId);
 
     if (!itinerary) {
       return res.status(404).json({ message: 'Itinerary not found' });
@@ -47,9 +32,9 @@ exports.getItineraryById = async (req, res) => {
 // Create a new itinerary
 exports.createItinerary = async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { date, trip_id } = req.body;
 
-    const itinerary = await Itinerary.create({ title, description });
+    const itinerary = await Itinerary.create({ date, trip_id });
 
     res.status(201).json(itinerary);
   } catch (error) {
@@ -62,16 +47,14 @@ exports.createItinerary = async (req, res) => {
 exports.updateItinerary = async (req, res) => {
   try {
     const { itineraryId } = req.params;
-    const { title, description } = req.body;
 
     const itinerary = await Itinerary.findByPk(itineraryId);
 
     if (!itinerary) {
       return res.status(404).json({ message: 'Itinerary not found' });
     }
-
-    itinerary.title = title;
-    itinerary.description = description;
+      itinerary.place_id = req.body.place_id;
+      itinerary.hotel_id = req.body.hotel_id;
 
     await itinerary.save();
 
