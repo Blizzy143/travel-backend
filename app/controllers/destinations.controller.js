@@ -1,5 +1,6 @@
 // controllers/destinations.js
 const { Destination } = require('../models');
+const { Place } = require('../models');
 
 // Get all destinations
 const getAllDestinations = async (req, res) => {
@@ -14,27 +15,27 @@ const getAllDestinations = async (req, res) => {
 
 // Get a destination by ID
 const getDestinationById = async (req, res) => {
-
-  console.log('params ======> '+ req.params);
-  try {
-    const { id } = req.params;
-    const destination = await Destination.findByPk(id);
-    if (!destination) {
-      return res.status(404).json({ message: 'Destination not found' });
+  const id = req.params.id;
+  Destination.findByPk(id, { include: Place })
+    .then(data => {
+      if (!data) {
+        res.status(404).send({ message: "Not found destination with id " + id });
+      }
+      res.send(data);
+    }).
+    catch(err => {
+      res.status(500).send({
+        message: "Error retrieving destination with id=" + id
+      });
     }
-    console.log('destination =====>' + destination)
-    return res.json(destination);
-  } catch (error) {
-    console.error('Error in getting destination by ID:', error);
-    return res.status(500).json({ message: 'Internal server error' });
-  }
+    );
 };
 
 // Create a new destination
 const createDestination = async (req, res) => {
   try {
-    const { name, description, rating , image} = req.body;
-    const newDestination = await Destination.create({ name, description, rating , image});
+    const { name, description, rating, image } = req.body;
+    const newDestination = await Destination.create({ name, description, rating, image });
     return res.status(201).json(newDestination);
   } catch (error) {
     console.error('Error in creating destination:', error);
@@ -46,7 +47,7 @@ const createDestination = async (req, res) => {
 const updateDestination = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, rating , image} = req.body;
+    const { name, description, rating, image } = req.body;
     const destination = await Destination.findByPk(id);
     if (!destination) {
       return res.status(404).json({ message: 'Destination not found' });

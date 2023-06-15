@@ -1,11 +1,8 @@
-const fs = require('fs');
-const path = require('path');
+
 const dbConfig = require("../config/db.config.js");
 const Sequelize = require("sequelize");
 
 
-// Include the seeder file
-const seederFile = require('../seeders/20230603-destinations.js');
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
@@ -19,24 +16,18 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 });
 
 const db = {};
-
-fs.readdirSync(__dirname)
-  .filter((file) => file !== 'index.js')
-  .forEach((file) => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
-  });
-
-Object.keys(db).forEach((modelName) => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
-
-db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+db.sequelize = sequelize;
 
-// Seed the data
-// seederFile.up(sequelize);
+// Include the model files
+db.Destination = require('./destination.model.js')(sequelize, Sequelize);
+db.Place = require('./place.model.js')(sequelize, Sequelize);
+
+
+//relationship between destination and place
+
+db.Destination.hasMany(db.Place, { foreignKey: 'destination_id' });
+db.Place.belongsTo(db.Destination, { foreignKey: 'destination_id' });
+
 
 module.exports = db;
