@@ -1,6 +1,6 @@
 require("dotenv").config();
 const bodyParser = require('body-parser');
-
+var morgan = require('morgan')
 const express = require("express");
 const cors = require("cors");
 
@@ -16,6 +16,7 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(morgan('dev'))
 app.options("*", cors());
 
 // parse requests of content-type - application/json
@@ -37,6 +38,8 @@ const iteneraryItemsRouter = require("./app/routes/iteneraryItems.routes.js")
 const userRouter = require("./app/routes/user.routes.js")
 const hotelRouter = require("./app/routes/hotel.routes.js")
 const placeController = require("./app/routes/place.routes.js")
+
+
 app.use('/auth', authRouter)
 app.use('/destinations', destinationsRouter)
 app.use('/trips', tripsRouter)
