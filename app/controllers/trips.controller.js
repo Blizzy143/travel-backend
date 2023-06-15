@@ -1,4 +1,5 @@
-const { Trip, Destination, User } = require('../models');
+const { Trip, Destination, User, Itinerary, Hotel, Place} = require('../models');
+
 
 // Get all trips
 exports.getAllTrips = async (req, res) => {
@@ -29,14 +30,29 @@ exports.getTrips = async (req, res) => {
 };
 
 exports.getTripById = async (req, res) => {
+
   try {
-    const trip = await Trip.findOne({ where: { id: req.params.id, userId: req.user.id, destinationId: req.query.destinationId } });
+    const  tripId  = req.params.id;
+    const trip = await Trip.findByPk(tripId, {
+      include: [
+        { 
+          model: Itinerary ,
+          include: [
+            { model: Hotel },
+            { model: Place },
+          ]
+        }
+      ],
+    });
+
     if (!trip) {
-      return res.status(404).json({ error: 'Trip not found' });
+      return res.status(404).json({ message: 'Trip not found' });
     }
-    res.json(trip);
+
+    res.status(200).json(trip);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch trip details' });
+    console.error('Error retrieving trip by id:', error);
+    res.status(500).json({ message: 'An error occurred while retrieving trip by id' });
   }
 };
 
