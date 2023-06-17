@@ -8,6 +8,13 @@ router.get('/', tripsController.getAllTrips);
 // Get all trips
 router.get('/:id', tripsController.getTripById);
 
+// Get all trips by destination id
+router.get('/destination/:destinationId', tripsController.getTripByDestinationId);
+
+//Add user to trip
+router.post('/:tripId/users/:userId', tripsController.addUserToTrip);
+
+
 // Create a new trip
 router.post('/', tripsController.createTrip);
 

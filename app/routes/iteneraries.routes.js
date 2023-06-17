@@ -17,4 +17,8 @@ router.put('/:itineraryId', itinerariesController.updateItinerary);
 // Delete an itinerary
 router.delete('/:itineraryId', itinerariesController.deleteItinerary);
 
+//Add a place to an itinerary
+router.post('/:itineraryId/places/:placeId', itinerariesController.addPlaceToItinerary);
+
+
 module.exports = router;

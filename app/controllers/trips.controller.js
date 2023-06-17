@@ -29,6 +29,20 @@ exports.getTrips = async (req, res) => {
   }
 };
 
+
+// Get trip by destination id
+exports.getTripByDestinationId = async (req, res) => {
+  try {
+    const { destinationId } = req.params;
+    const trips = await Trip.findAll({ where: { destination_id: destinationId } });
+    res.json(trips);
+  } catch (error) {
+    console.log("fetch trips error===>" +error);
+    res.status(500).json({ error: 'Failed to fetch trips' });
+  }
+}; 
+
+
 exports.getTripById = async (req, res) => {
 
   try {
@@ -61,21 +75,15 @@ exports.getTripById = async (req, res) => {
 exports.createTrip = async (req, res) => {
   console.log(req.body);
   try {
-    const { name, destination_id, user_id, start_date, end_date } = req.body;
+    const { name, destination_id, start_date, end_date } = req.body;
 
     const destination = await Destination.findByPk(destination_id);
-    const user = await User.findByPk(user_id);
-
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
+   
     if (!destination) {
       return res.status(404).json({ message: 'Destination not found' });
     }
 
-    const trip = await Trip.create({ name: name, start_date: start_date, end_date: end_date, destination_id: destination_id, user_id: user_id });
+    const trip = await Trip.create({ name: name, start_date: start_date, end_date: end_date, destination_id: destination_id });
 
     res.status(201).json(trip);
   } catch (error) {
@@ -118,11 +126,6 @@ exports.updateTrip = async (req, res) => {
     }
 
     const destination = await Destination.findByPk(destination_id);
-    const user = await User.findByPk(user_id);
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
 
     if (!destination) {
       return res.status(404).json({ message: 'Destination not found' });
@@ -132,7 +135,6 @@ exports.updateTrip = async (req, res) => {
     trip.start_date = start_date;
     trip.end_date = end_date;
     trip.destination_id = destination_id;
-    trip.user_id = user_id;
 
     await trip.save();
 
@@ -142,3 +144,31 @@ exports.updateTrip = async (req, res) => {
     res.status(500).json({ message: 'An error occurred while updating the trip' });
   }
 }
+
+
+exports.addUserToTrip = async (req, res) => {
+ const { tripId, userId } = req.params;
+  try {
+    const trip = await Trip.findByPk(tripId);
+
+    if (!trip) {
+      return res.status(404).json({ message: 'Trip not found' });
+    }
+
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    await trip.addUser(user);
+
+    res.status(200).json({ message: 'User added to trip successfully' });
+  }
+  catch (error) {
+    console.error('Error adding user to trip:', error);
+    res.status(500).json({ message: 'An error occurred while adding user to trip' });
+  }
+
+}
+

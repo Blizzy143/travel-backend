@@ -1,4 +1,4 @@
-const { Itinerary, ItineraryItem, Destination } = require('../models');
+const { Itinerary, ItineraryItem, Destination, Place } = require('../models');
 
 // Get all itineraries
 exports.getAllItineraries = async (req, res) => {
@@ -84,3 +84,28 @@ exports.deleteItinerary = async (req, res) => {
     res.status(500).json({ message: 'An error occurred while deleting the itinerary' });
   }
 };
+
+
+exports.addPlaceToItinerary = async (req, res) => {
+ const { itineraryId, placeId } = req.params;
+  try {
+    const itinerary = await Itinerary.findByPk(itineraryId);
+    const place = await Place.findByPk(placeId);
+
+    if (!itinerary) {
+      return res.status(404).json({ message: 'Itinerary not found' });
+    }
+
+    if (!place) {
+      return res.status(404).json({ message: 'Place not found' });
+    }
+
+    await itinerary.addPlace(place);
+
+    res.status(200).json(itinerary);
+  }
+  catch (error) {
+    console.error('Error adding place to itinerary:', error);
+    res.status(500).json({ message: 'An error occurred while adding place to itinerary' });
+  }
+}
