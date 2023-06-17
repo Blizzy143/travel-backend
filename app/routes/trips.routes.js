@@ -24,4 +24,8 @@ router.put('/:tripId', tripsController.updateTrip);
 // Delete a trip
 router.delete('/:tripId', tripsController.deleteTrip);
 
+// Get all trips by user id
+router.get('/user/:userId', tripsController.getTripsByUserId);
+
+
 module.exports = router;

@@ -172,3 +172,15 @@ exports.addUserToTrip = async (req, res) => {
 
 }
 
+exports.getTripsByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    console.log('user id ======>' + userId);
+    const trips = await Trip.findAll({ where: { user_id: userId } });
+    res.json(trips);
+  } catch (error) {
+    console.log("fetch trips error===>" +error);
+    res.status(500).json({ error: 'Failed to fetch trips' });
+  }
+}
+
