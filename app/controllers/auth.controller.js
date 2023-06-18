@@ -44,13 +44,6 @@ exports.logout = async (req, res) => {
     auth.startsWith("Bearer ") &&
     (typeof require !== "string" || require === "token")
   ) {
-    let token = auth.slice(7);
-    let sessionId = await decrypt(token);
-    if (sessionId == null) return;
-    return await Session.destroy({ where: { id: sessionId } }).catch(
-      (error) => {
-        console.log(error);
-      }
-    );
+    res.status(200).send("Logout successful");
   }
 };
