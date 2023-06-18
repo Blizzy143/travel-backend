@@ -13,6 +13,9 @@ router.get('/destination/:destinationId', tripsController.getTripByDestinationId
 
 //Add user to trip
 router.post('/:tripId/users/:userId', tripsController.addUserToTrip);
+// Remove user from trip
+router.delete('/:tripId/users/:userId', tripsController.removeUserFromTrip);
+
 
 
 // Create a new trip

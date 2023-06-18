@@ -172,6 +172,31 @@ exports.addUserToTrip = async (req, res) => {
 
 }
 
+exports.removeUserFromTrip = async (req, res) => {
+  const { tripId, userId } = req.params;
+  try {
+    const trip = await Trip.findByPk(tripId);
+    const user = await User.findByPk(userId);
+
+    if (!trip) {
+      return res.status(404).json({ message: 'Trip not found' });
+    }
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    await trip.removeUser(user);
+
+    res.status(200).json({ message: 'User removed from trip successfully' });
+  }
+  catch (error) {
+    console.error('Error removing user from trip:', error);
+    res.status(500).json({ message: 'An error occurred while removing user from trip' });
+  }
+
+}
+
 exports.getTripsByUserId = async (req, res) => {
   try {
     const { userId } = req.params;
