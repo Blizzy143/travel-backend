@@ -44,6 +44,6 @@ exports.logout = async (req, res) => {
     auth.startsWith("Bearer ") &&
     (typeof require !== "string" || require === "token")
   ) {
-    res.status(200).send("Logout successful");
+    res.status(200).send({message:"Logout successful"});
   }
 };
