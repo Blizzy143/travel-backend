@@ -1,4 +1,4 @@
-const { Trip, Destination, User, Itinerary, Hotel, Place} = require('../models');
+const { Trip, Destination, User, Itinerary, Hotel, Place } = require('../models');
 
 
 // Get all trips
@@ -18,13 +18,13 @@ exports.getAllTrips = async (req, res) => {
 exports.getTrips = async (req, res) => {
   try {
     const { userId, destinationId } = req.query;
-    console.log("request =============" +req.params)
+    console.log("request =============" + req.params)
     console.log('user id ======>' + userId);
     console.log('destination id ======>' + destinationId);
     const trips = await Trip.findAll({ where: { user_id: req.params.userId, destination_id: req.params.destinationId } });
     res.json(trips);
   } catch (error) {
-    console.log("fetch trips error===>" +error);
+    console.log("fetch trips error===>" + error);
     res.status(500).json({ error: 'Failed to fetch trips' });
   }
 };
@@ -37,20 +37,20 @@ exports.getTripByDestinationId = async (req, res) => {
     const trips = await Trip.findAll({ where: { destination_id: destinationId } });
     res.json(trips);
   } catch (error) {
-    console.log("fetch trips error===>" +error);
+    console.log("fetch trips error===>" + error);
     res.status(500).json({ error: 'Failed to fetch trips' });
   }
-}; 
+};
 
 
 exports.getTripById = async (req, res) => {
 
   try {
-    const  tripId  = req.params.id;
+    const tripId = req.params.id;
     const trip = await Trip.findByPk(tripId, {
       include: [
-        { 
-          model: Itinerary ,
+        {
+          model: Itinerary,
           include: [
             { model: Hotel },
             { model: Place },
@@ -78,7 +78,7 @@ exports.createTrip = async (req, res) => {
     const { name, destination_id, start_date, end_date } = req.body;
 
     const destination = await Destination.findByPk(destination_id);
-   
+
     if (!destination) {
       return res.status(404).json({ message: 'Destination not found' });
     }
@@ -147,7 +147,7 @@ exports.updateTrip = async (req, res) => {
 
 
 exports.addUserToTrip = async (req, res) => {
- const { tripId, userId } = req.params;
+  const { tripId, userId } = req.params;
   try {
     const trip = await Trip.findByPk(tripId);
 
@@ -175,11 +175,16 @@ exports.addUserToTrip = async (req, res) => {
 exports.getTripsByUserId = async (req, res) => {
   try {
     const { userId } = req.params;
-    console.log('user id ======>' + userId);
-    const trips = await Trip.findAll({ where: { user_id: userId } });
+
+    const user = await User.findByPk(userId);
+    const trips = await user.getTrips({
+      include: [
+        { model: Destination }
+      ]
+    });
     res.json(trips);
   } catch (error) {
-    console.log("fetch trips error===>" +error);
+    console.log("fetch trips error===>" + error);
     res.status(500).json({ error: 'Failed to fetch trips' });
   }
 }
